@@ -1,4 +1,4 @@
-package com.ridematch.ride_matching_platform;
+package com.ridematch;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
