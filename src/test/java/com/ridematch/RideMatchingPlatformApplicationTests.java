@@ -1,4 +1,4 @@
-package com.ridematch.ride_matching_platform;
+package com.ridematch;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
