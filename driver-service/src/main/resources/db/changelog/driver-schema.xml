@@ -6,46 +6,10 @@
           http://www.liquibase.org/xml/ns/dbchangelog
           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
     
-    <changeSet id="create-document-table" author="aalzuair">
-        <createTable tableName="document">
-            <column name="id"
-                    type="uuid">
-                <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="pk_document" />
-            </column>
-            
-            <column name="document_type" type="varchar(40)">
-                <constraints nullable="false" />
-            </column>
-            
-            <column name="document_path" type="text">
-                <constraints nullable="false" />
-            </column>
-            
-            <!-- Audit Columns -->
-            <column name="created_by"
-                    type="VARCHAR(255)" />
-            <column name="created_date"
-                    type="DATETIME">
-                <constraints nullable="false" />
-            </column>
-            <column name="last_modified_by"
-                    type="VARCHAR(255)" />
-            <column name="last_modified_date"
-                    type="DATETIME">
-                <constraints nullable="false" />
-            </column>
-        </createTable>
-    </changeSet>
-    
     <changeSet id="create-vehicle-table" author="aalzauir">
         <createTable tableName="vehicle">
-            <column name="id"
-                    type="uuid">
-                <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="pk_vehicle" />
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_vehicle" />
             </column>
             
             <column name="plate_letter1" type="varchar(1)" />
@@ -59,9 +23,13 @@
                 <constraints nullable="false" />
             </column>
             
-            <column name="registration_document_id" type="uuid" />
-            <column name="make" type="varchar(80)" />
+            <column name="registration_document" type="text" />
+            <column name="maker" type="varchar(80)" />
             <column name="model" type="varchar(80)" />
+            
+            <column name="images" type="jsonb" defaultValueComputed="'[]'::jsonb">
+                <constraints nullable="false" />
+            </column>
             
             <!-- Audit Columns -->
             <column name="created_by"
@@ -77,21 +45,12 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
-        
-        <addForeignKeyConstraint baseTableName="vehicle"
-                                 baseColumnNames="registration_document_id"
-                                 referencedTableName="document"
-                                 referencedColumnNames="id"
-                                 constraintName="fk_vehicle_registration_doc" />
     </changeSet>
     
     <changeSet id="create-driver-table" author="aalzuair">
         <createTable tableName="driver">
-            <column name="id"
-                    type="uuid">
-                <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="pk_driver" />
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_driver" />
             </column>
             
             <column name="full_name" type="varchar(120)">
@@ -108,16 +67,19 @@
             
             <column name="license_expiry_date" type="date" />
             
-            <column name="license_document_id" type="uuid" />
+            <column name="license_document" type="text" />
             
             <column name="rating_average" type="numeric(2,1)" />
             
             <column name="rating_count" type="integer" defaultValueNumeric="0" />
             
-            <column name="vehicle_id" type="uuid">
+            <column name="vehicle_id" type="BIGINT">
                 <constraints nullable="false" />
             </column>
             
+            <column name="is_verified" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
             <!-- Audit Columns -->
             <column name="created_by"
                     type="VARCHAR(255)" />
@@ -146,44 +108,9 @@
                              constraintName="uk_driver_vehicle" />
         
         <addForeignKeyConstraint baseTableName="driver"
-                                 baseColumnNames="license_document_id"
-                                 referencedTableName="document"
-                                 referencedColumnNames="id"
-                                 constraintName="fk_driver_license_doc" />
-        
-        <addForeignKeyConstraint baseTableName="driver"
                                  baseColumnNames="vehicle_id"
                                  referencedTableName="vehicle"
                                  referencedColumnNames="id"
                                  constraintName="fk_driver_vehicle" />
-    </changeSet>
-    
-    <changeSet id="create-vehicle-images-table" author="aalzuair">
-        <createTable tableName="vehicle_images">
-            <column name="id"
-                    type="uuid">
-                <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="pk_vehicle_images" />
-            </column>
-            <column name="vehicle_id" type="uuid">
-                <constraints nullable="false" />
-            </column>
-            <column name="document_id" type="uuid">
-                <constraints nullable="false" />
-            </column>
-        </createTable>
-        
-        <addForeignKeyConstraint baseTableName="vehicle_images"
-                                 baseColumnNames="vehicle_id"
-                                 referencedTableName="vehicle"
-                                 referencedColumnNames="id"
-                                 constraintName="fk_vehicle_images_vehicle" />
-        
-        <addForeignKeyConstraint baseTableName="vehicle_images"
-                                 baseColumnNames="document_id"
-                                 referencedTableName="document"
-                                 referencedColumnNames="id"
-                                 constraintName="fk_vehicle_images_document" />
     </changeSet>
 </databaseChangeLog>
