@@ -1,4 +1,4 @@
-package com.ridematch.entity;
+package com.ridematch.driver.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
