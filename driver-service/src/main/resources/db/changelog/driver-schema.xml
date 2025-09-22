@@ -80,6 +80,21 @@
             <column name="is_verified" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false" />
             </column>
+            
+            <column name="is_available" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false" />
+            </column>
+            
+            <column name="latitude" type="DECIMAL(9,6)">
+                <constraints nullable="false" />
+            </column>
+            <column name="longitude" type="DECIMAL(9,6)">
+                <constraints nullable="false" />
+            </column>
+    
+            <column name="current_ride_id" type="BIGINT">
+            </column>
+            
             <!-- Audit Columns -->
             <column name="created_by"
                     type="VARCHAR(255)" />

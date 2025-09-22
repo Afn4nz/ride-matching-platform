@@ -1,12 +1,12 @@
 package com.ridematch.driver.entity;
 
+import com.ridematch.driver.dto.Location;
 import com.ridematch.driver.enums.DriverStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -41,4 +41,14 @@ public class Driver extends AuditEntity {
     private Vehicle vehicle;
 
     private boolean isVerified;
+
+    private boolean isAvailable;
+
+    @Column(nullable = false, precision = 9, scale = 6)
+    private BigDecimal latitude;
+
+    @Column(nullable = false, precision = 9, scale = 6)
+    private BigDecimal longitude;
+
+    private Long currentRideId;
 }
