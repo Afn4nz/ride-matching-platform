@@ -1,4 +1,4 @@
-package com.ridematch.driver_service;
+package com.ridematch.driver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
