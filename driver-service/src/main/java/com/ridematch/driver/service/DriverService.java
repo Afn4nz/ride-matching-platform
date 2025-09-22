@@ -6,12 +6,15 @@ import com.ridematch.driver.entity.Vehicle;
 import com.ridematch.driver.excpetion.UploadException;
 import com.ridematch.driver.mapper.DriverMapper;
 import com.ridematch.driver.mapper.VehicleMapper;
+import com.ridematch.driver.producer.DriverPublisher;
 import com.ridematch.driver.repository.DriverRepository;
 import com.ridematch.driver.repository.VehicleRepository;
 import com.ridematch.driver.util.FileFormatter;
 import com.ridematch.driver.Validation.FileValidator;
+import com.ridematch.driver.util.GeoUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static com.ridematch.driver.enums.ErrorCode.FILE_UPLOAD_ERROR;
 
@@ -35,6 +36,13 @@ public class DriverService {
     private final VehicleRepository vehicleRepository;
     private final DriverRepository driverRepository;
     private final FileValidator fileValidator;
+    private final DriverPublisher publisher;
+
+    @Value("${app.match.search-radius-start-m:3000}")
+    private double radiusMeters;
+
+    @Value("${app.match.search-radius-step-m:2000}")
+    private double radiusStepM;
 
     @Transactional
     public void register(
@@ -92,6 +100,34 @@ public class DriverService {
 
     public void updateDriverStatus(Long id, StatusUpdateRequest statusUpdateRequest) {
         driverRepository.findById(id).get().setStatus(statusUpdateRequest.getDriverStatus());
+    }
+
+    @Transactional
+    public void assignDriverForRide(Long rideId, double lat, double lng) {
+        double[] bb = GeoUtils.bbox(lat, lng, radiusMeters);
+        Driver driver =
+                driverRepository.findNearestDriverWithinBBox(
+                        lat, lng, bb[0], bb[1], bb[2], bb[3], radiusMeters);
+
+        if (driver == null) { //TODO: Handle this case
+            throw new RuntimeException("NO driver available");
+        }
+
+        driver.setAvailable(false);
+        driver.setCurrentRideId(rideId);
+        driverRepository.save(driver);
+        publisher.publishDriverAssigned(new DriverAssignmentDTO(rideId, driver.getId()));
+    }
+
+    @Transactional
+    public void releaseDriverForRide(Long rideId) {
+        driverRepository
+                .findByCurrentRideId(rideId)
+                .ifPresent(
+                        d -> {
+                            d.setAvailable(true);
+                            d.setCurrentRideId(null);
+                        });
     }
 
     private void storeDriverAndVehicleDocuments(

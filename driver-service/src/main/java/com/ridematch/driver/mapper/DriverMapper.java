@@ -17,6 +17,8 @@ public interface DriverMapper {
             target = "status",
             expression = "java(com.ridematch.driver.enums.DriverStatus.OFFLINE)")
     @Mapping(target = "vehicle", source = "vehicle")
+    @Mapping(target = "latitude", source = "registerRequest.location.latitude")
+    @Mapping(target = "longitude", source = "registerRequest.location.longitude")
     Driver toEntity(RegisterRequest registerRequest, Vehicle vehicle);
 
     DriverResponse toDriverResponse(Driver driver);

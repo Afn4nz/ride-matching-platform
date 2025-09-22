@@ -1,4 +1,4 @@
-package com.ridematch.ride.configuration;
+package com.ridematch.driver.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +16,11 @@ public class RabbitConfigProperties {
     private String password;
 
     private String exchangeRideEvents;
-
+    private String queueMatching;
     private String queueAssignment;
+    private String queueAvailability;
+
+    private String routingRideRequested;
+    private String routingRideCanceled;
+    private String routingRideCompleted;
 }

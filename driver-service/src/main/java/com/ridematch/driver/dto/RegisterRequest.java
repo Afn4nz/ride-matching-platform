@@ -24,4 +24,6 @@ public class RegisterRequest {
 
     @Future private LocalDate licenseExpiryDate;
     private VehicleInformationDTO vehicleInformationDTO;
+
+    private Location location;
 }
