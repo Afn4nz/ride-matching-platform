@@ -237,6 +237,10 @@ You can import the ready-made Postman collection into your Postman app.
   
 ## 🔮Future Work 
 
+- Implement Robust Exception Handling
+
+- Introduce Aspect-Oriented Logging (AOP)
+
 - Auth ↔ Domain linkage (explicitly requested):
 
 - When a Rider requests their first ride, create a Rider profile/record using the sub/userId from JWT.
