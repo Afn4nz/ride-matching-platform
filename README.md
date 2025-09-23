@@ -95,7 +95,7 @@ docker compose logs -f ride-service
 
 You can import the ready-made Postman collection into your Postman app.
 
-**Download here:** [Ride-Matching-Platform_collection.json](ride-matching-platform/Ride-Matching-Platform.postman_collection.json)
+**Download here:** [Ride-Matching-Platform_collection.json](postmaan/Ride-Matching-Platform.postman_collection.json)
 
 ---
 
