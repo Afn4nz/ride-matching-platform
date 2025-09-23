@@ -20,13 +20,13 @@ public class RideController {
 
     @PreAuthorize("hasRole('RIDER')")
     @PostMapping
-    public ResponseEntity<?> requestRide(@RequestBody RideRequest request) throws Exception {
+    public ResponseEntity<?> requestRide(@RequestBody RideRequest request) {
         rideService.requestRide(request);
         return ApiResponse.getSuccessResponse("Ride Requested Successfully! Please wait till we find you a driver");
     }
 
     @PreAuthorize("hasRole('RIDER')")
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}/cancel")
     public  ResponseEntity<?> cancelRide(@PathVariable("id") @ValidId(entity = Ride.class) Long id) {
         rideService.cancelRide(id);
         return ApiResponse.getSuccessResponse("Ride Cancelled Successfully!");
