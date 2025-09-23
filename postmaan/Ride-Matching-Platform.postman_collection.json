@@ -1,0 +1,454 @@
+{
+	"info": {
+		"_postman_id": "7f3ffe9b-01b5-43bc-93d4-0c599399140c",
+		"name": "Ride-Matching-Platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24645265"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"BABA\",\r\n    \"password\": 1234\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"BABA\",\r\n    \"password\": 1234,\r\n    \"role\": \"ROLE_ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ride",
+			"item": [
+				{
+					"name": "Request Ride",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pickUp\": {\r\n        \"latitude\": 40.7484,\r\n        \"longitude\": -73.9857\r\n    },\r\n    \"dropOff\": {\r\n        \"latitude\": 37.784173,\r\n        \"longitude\": -122.401557\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/rides",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rides"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "End Ride",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/rides/32/end?driverId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rides",
+								"32",
+								"end"
+							],
+							"query": [
+								{
+									"key": "driverId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Ride",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBcmVlaiIsImlhdCI6MTc1ODYyMTA1NSwiZXhwIjoxNzU4NjI0NjU1LCJyb2xlIjoiUk9MRV9SSURFUiIsInVpZCI6IjYifQ.1h2GcOZXQe6xqkwGtvzxt3VNTq2Nhk_FYITLn8WWLKM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/rides/90/cancel",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rides",
+								"90",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Driver",
+			"item": [
+				{
+					"name": "Update My Documents",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "licenseDocument",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/AfnanAlzuairCV.pdf",
+									"disabled": true
+								},
+								{
+									"key": "registrationDocument",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/AfnanResumeDraft.pdf",
+									"disabled": true
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Pictures/Screenshots/Screenshot 2023-03-06 104850.png"
+								},
+								{
+									"key": "driverInformation",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/ftp-fe/src/environments/driver.json",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/drivers/5/update-documents",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"drivers",
+								"5",
+								"update-documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View All Drivers",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/drivers?isVerified=true",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"drivers"
+							],
+							"query": [
+								{
+									"key": "isVerified",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXYWZhIiwiaWF0IjoxNzU4NjE3ODg5LCJleHAiOjE3NTg2MjE0ODksInJvbGUiOiJST0xFX0RSSVZFUiIsInVpZCI6IjcifQ.Yy6QxpJDMlIPQ6LVKINqRFdNYvZpHJhPxrd3seJH8sQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "licenseDocument",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/AfnanAlzuairCV.pdf"
+								},
+								{
+									"key": "registrationDocument",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/AfnanAlzuairCV.pdf"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Pictures/Screenshots/Screenshot 2023-03-07 133627.png"
+								},
+								{
+									"key": "driverInformation",
+									"value": "{\n  \"fullName\": \"WAFAADriver\",\n  \"phoneNumber\": \"0506488313\",\n  \"email\": \"wafa@example.com\",\n  \"licenseExpiryDate\": \"2027-03-15\",\n  \"location\": {\n \"latitude\": 40.7484,\n  \"longitude\": -73.9857\n  },\n \n  \"vehicleInformationDTO\": {\n    \"plateLetter1\": \"B\",\n    \"plateLetter2\": \"C\",\n    \"plateLetter3\": \"V\",\n    \"plateNumber\": \"1234\",\n    \"registrationType\": \"PRIVATE\",\n    \"maker\": \"Toyota\",\n    \"model\": \"Camry\"\n  }\n}\n",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/drivers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Driver Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "licenseDocument",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/AfnanAlzuairCV.pdf"
+								},
+								{
+									"key": "registrationDocument",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/AfnanResumeDraft.pdf"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Pictures/Screenshots/Screenshot 2023-03-06 104850.png"
+								},
+								{
+									"key": "driverInformation",
+									"type": "file",
+									"src": "/C:/Users/aalzuayr/Documents/ftp-fe/src/environments/driver.json"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/drivers/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"drivers",
+								"5"
+							],
+							"query": [
+								{
+									"key": "isVerified",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update my status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Proxy-Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"driverStatus\": \"ONLINE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/drivers/5/status",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"drivers",
+								"5",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ride-Service Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth-Service Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Driver-Service Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
