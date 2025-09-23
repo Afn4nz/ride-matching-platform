@@ -130,6 +130,19 @@
             <artifactId>imageio-jpeg</artifactId>
             <version>3.10.1</version>
         </dependency>
+    
+        <!-- Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+    
+        <!-- Reusable security lib -->
+        <dependency>
+            <groupId>com.ridematch</groupId>
+            <artifactId>security-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         
         <!-- Tests -->
         <dependency>
