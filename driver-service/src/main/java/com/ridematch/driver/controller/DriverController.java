@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import java.util.List;
 public class DriverController {
     private final DriverService driverService;
 
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping
     public ResponseEntity<?> register(
             @RequestPart(value = "licenseDocument") MultipartFile licenseDocument,
@@ -35,17 +37,20 @@ public class DriverController {
                 "You registration request submit successfully! we will verify your documents");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> viewDriverDetails(@PathVariable("id") Long id) {
         return ApiResponse.getSuccessResponse(driverService.viewDriverDetails(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<?> viewAllDrivers(
             @PageableDefault Pageable pageable, DriverFilter driverFilter) {
         return ApiResponse.getSuccessResponse(driverService.viewAllDrivers(driverFilter, pageable));
     }
 
+    @PreAuthorize("hasRole('DRIVER')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> updateDriverStatus(
             @PathVariable("id") Long id, @RequestBody StatusUpdateRequest statusUpdateRequest) {
@@ -53,6 +58,7 @@ public class DriverController {
         return ApiResponse.getSuccessResponse("Updated Successfully");
     }
 
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/{id}/update-documents")
     public ResponseEntity<?> updateDocuments(
             @PathVariable("id") Long id,
