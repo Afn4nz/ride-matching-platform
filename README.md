@@ -95,7 +95,7 @@ docker compose logs -f ride-service
 
 You can import the ready-made Postman collection into your Postman app.
 
-**Download here:** [Cheko.postman_collection.json](cheko/postman/Cheko.postman_collection.json)
+**Download here:** [Ride-Matching-Platform_collection.json](ride-matching-platform/Ride-Matching-Platform.postman_collection.json)
 
 ---
 
