@@ -1,9 +1,9 @@
-# 🚕 Ride-Matching Platform
+# 🚕Ride-Matching Platform
 
 A microservices playground for a ride-hailing workflow built with **Spring Boot**, **Spring Cloud (Eureka + Gateway)**, **PostgreSQL**, **RabbitMQ**, and **MinIO** — all orchestrated with **Docker Compose v3.9**.  
 ---
 
-## 🧭 Table of Contents
+## 🧭Table of Contents
 
 - [Overview](#overview)
 - [Architecture](#architecture)
@@ -26,7 +26,7 @@ A microservices playground for a ride-hailing workflow built with **Spring Boot*
 
 ---
 
-## 💡 Overview
+## 💡Overview
 
 - **Riders** request, cancel, and complete rides.  
 - **Drivers** manage profiles, documents, and availability.  
@@ -36,7 +36,7 @@ A microservices playground for a ride-hailing workflow built with **Spring Boot*
 
 ---
 
-## 🏗 Architecture
+## 🏗Architecture
 
 ```
 Client → API Gateway :8080 (JWT validation, routing)
@@ -58,7 +58,7 @@ PostgreSQL :5432   MinIO :9000/:9090
 
 ---
 
-## 📂 Project Structure
+## 📂Project Structure
 
 ```
 .
@@ -71,7 +71,7 @@ PostgreSQL :5432   MinIO :9000/:9090
 ```
 
 ---
-## ▶️ How to Run
+## ▶️How to Run
 
 ### Prerequisites
 - Docker Desktop / Engine  
@@ -90,7 +90,7 @@ docker compose logs -f ride-service
 ```
 
 ---
-## 📦 Postman Collection
+## 📦Postman Collection
 
 You can import the ready-made Postman collection into your Postman app.
 
@@ -117,15 +117,15 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-## 🧩 Services
+## 🧩Services
 
-### 🌐 discovery-server (Eureka) — :8761
+### 🌐discovery-server (Eureka) — :8761
 - **Role**: Service registry for discovery.  
 - **UI**: [http://localhost:8761](http://localhost:8761)  
 
 ---
 
-### 🚪 api-gateway — :8080
+### 🚪api-gateway — :8080
 - **Role**: Single ingress for clients; routes to downstream services via Eureka.  
 - **Typical routes**:  
   - `/api/auth/**` → auth-service  
@@ -134,7 +134,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-### 🔐 auth-service — :8081
+### 🔐auth-service — :8081
 - **Role**: Authentication/authorization. Issues and validates JWTs.  
 - **DB**: PostgreSQL schema `auth` (Liquibase migrations).  
 - **Base path**: `/api/auth`  
@@ -145,7 +145,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-### 🚘 driver-service — :8082
+### 🚘driver-service — :8082
 - **Role**: Manage driver profiles, documents (MinIO), availability; publish assignments to RabbitMQ, and listen to ride events.  
 - **DB**: PostgreSQL schema `driver`  
 - **Messaging**:  
@@ -163,7 +163,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-### 🧭 ride-service — :8083
+### 🧭ride-service — :8083
 - **Role**: Manage ride lifecycle (request, cancel, complete).  
 - **DB**: PostgreSQL schema `ride`  
 - **Messaging**:  
@@ -186,7 +186,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-## 📨 Messaging Topology
+## 📨Messaging Topology
 
 **Exchange**: `ride.events` (topic)  
 - Keys: `ride.requested`, `ride.canceled`, `ride.completed`  
@@ -198,7 +198,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-## 🔁 End-to-End Flows
+## 🔁End-to-End Flows
 
 1. **Request → Assign**  
    Rider requests ride → `ride.requested` → driver-service assigns → publishes assignment → ride-service consumes → ride assigned.  
@@ -211,7 +211,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-## Security (JWT)
+## 🔐Security (JWT)
 
 - Register/Login via auth-service → obtain JWT  
 - Add header:  
@@ -225,7 +225,7 @@ You can import the ready-made Postman collection into your Postman app.
 
 ---
 
-## 🩺 Health & Observability
+## 🩺Health & Observability
 
 - Api-Geteway : `http://localhost:8080/actuator/health`
 - Auth-Service : `http://localhost:8081/actuator/health`
@@ -234,7 +234,7 @@ You can import the ready-made Postman collection into your Postman app.
 
   ---
   
-## 🔮 Future Work 
+## 🔮Future Work 
 
 - Auth ↔ Domain linkage (explicitly requested):
 
