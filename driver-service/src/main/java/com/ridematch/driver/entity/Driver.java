@@ -1,6 +1,5 @@
 package com.ridematch.driver.entity;
 
-import com.ridematch.driver.dto.Location;
 import com.ridematch.driver.enums.DriverStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

@@ -1,9 +1,11 @@
 package com.ridematch.driver.controller;
 
 import com.ridematch.driver.Specification.DriverFilter;
+import com.ridematch.driver.Validation.ValidId;
 import com.ridematch.driver.dto.ApiResponse;
 import com.ridematch.driver.dto.RegisterRequest;
 import com.ridematch.driver.dto.StatusUpdateRequest;
+import com.ridematch.driver.entity.Driver;
 import com.ridematch.driver.service.DriverService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,7 @@ public class DriverController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<?> viewDriverDetails(@PathVariable("id") Long id) {
+    public ResponseEntity<?> viewDriverDetails(@PathVariable("id") @ValidId(entity = Driver.class) Long id) {
         return ApiResponse.getSuccessResponse(driverService.viewDriverDetails(id));
     }
 
@@ -53,7 +55,7 @@ public class DriverController {
     @PreAuthorize("hasRole('DRIVER')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> updateDriverStatus(
-            @PathVariable("id") Long id, @RequestBody StatusUpdateRequest statusUpdateRequest) {
+            @PathVariable("id") @ValidId(entity = Driver.class) Long id, @RequestBody StatusUpdateRequest statusUpdateRequest) {
         driverService.updateDriverStatus(id, statusUpdateRequest);
         return ApiResponse.getSuccessResponse("Updated Successfully");
     }
@@ -61,7 +63,7 @@ public class DriverController {
     @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/{id}/update-documents")
     public ResponseEntity<?> updateDocuments(
-            @PathVariable("id") Long id,
+            @PathVariable("id") @ValidId(entity = Driver.class) Long id,
             @RequestPart(value = "licenseDocument", required = false) MultipartFile licenseDocument,
             @RequestPart(value = "registrationDocument", required = false)
                     MultipartFile registrationDocument,

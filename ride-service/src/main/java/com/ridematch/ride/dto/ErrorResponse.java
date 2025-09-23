@@ -1,11 +1,11 @@
-package com.ridematch.driver.dto;
+package com.ridematch.ride.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ErrorResponse { //TODO: Move it to shared lib
+public class ErrorResponse {
     String code;
     String message;
 }
