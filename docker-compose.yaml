@@ -14,8 +14,8 @@ services:
     image: minio/minio:latest
     container_name: minio
     ports:
-      - "9000:9000"   # S3 API
-      - "9090:9090"   # Web console
+      - "9000:9000"
+      - "9090:9090"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -26,15 +26,116 @@ services:
   rabbitmq:
     image: rabbitmq:3.13-management
     container_name: rabbitmq
-    restart: unless-stopped
     ports:
-      - "5672:5672"     # AMQP (your app connects here)
-      - "15672:15672"   # Management UI http://localhost:15672
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+
+  discovery-server:
+    build:
+      context: ./discovery-server
+    container_name: discovery-server
+    environment:
+      SPRING_APPLICATION_NAME: discovery-server
+      SERVER_PORT: 8761
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    depends_on:
+      - discovery-server
+    environment:
+      SPRING_APPLICATION_NAME: api-gateway
+      SERVER_PORT: 8080
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+    ports:
+      - "8080:8080"
+
+  auth-service:
+    ports:
+      - "8081:8081"
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    depends_on:
+      - discovery-server
+      - postgres
+    environment:
+      SPRING_APPLICATION_NAME: auth-service
+      SERVER_PORT: 8081
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SQL_HOST: postgres
+      SQL_PORT: 5432
+      SQL_USERNAME: app
+      SQL_PASSWORD: app
+      DB_NAME: auth
+      JWT_SECRET: CHANGE-ME-TO-A-256-BIT-SECRET-STRING
+
+  driver-service:
+    ports:
+      - "8082:8082"
+    build:
+      context: ./driver-service
+    container_name: driver-service
+    depends_on:
+      - discovery-server
+      - postgres
+      - minio
+      - rabbitmq
+    environment:
+      SPRING_APPLICATION_NAME: driver-service
+      SERVER_PORT: 8082
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SQL_HOST: postgres
+      SQL_PORT: 5432
+      SQL_USERNAME: app
+      SQL_PASSWORD: app
+      DB_NAME: driver
+      MINIO_URL: http://minio:9000
+      MINIO_BUCKET: test
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASS: guest
+      APP_JWT_SECRET: CHANGE-ME-TO-A-256-BIT-SECRET-STRING
+
+  ride-service:
+    ports:
+      - "8083:8083"
+    build:
+      context: ./ride-service
+    container_name: ride-service
+    depends_on:
+      - discovery-server
+      - postgres
+      - rabbitmq
+    environment:
+      SPRING_APPLICATION_NAME: ride-service
+      SERVER_PORT: 8083
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
+      SQL_HOST: postgres
+      SQL_PORT: 5432
+      SQL_USERNAME: app
+      SQL_PASSWORD: app
+      DB_NAME: ride
+      APP_JWT_SECRET: CHANGE-ME-TO-A-256-BIT-SECRET-STRING
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASS: guest
+      RABBIT_MQ_ASSIGN: ride-service.assignment
+
 
 volumes:
   minio_data:
