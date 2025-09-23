@@ -73,7 +73,7 @@ public class DriverService {
         return minioStorageService.populateDriverFiles(id, driverDetailsResponse);
     }
 
-    // TODO: Get id from token
+    // TODO: For better security, get the ID from the token
     public void updateDocuments(
             Long id,
             MultipartFile licenseDocument,
@@ -109,7 +109,7 @@ public class DriverService {
                 driverRepository.findNearestDriverWithinBBox(
                         lat, lng, bb[0], bb[1], bb[2], bb[3], radiusMeters);
 
-        if (driver == null) { //TODO: Handle this case
+        if (driver == null) { // TODO: Handle case when no driver is found
             throw new RuntimeException("NO driver available");
         }
 

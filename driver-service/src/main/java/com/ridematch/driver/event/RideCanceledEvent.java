@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RideCanceledEvent {
+public class RideCanceledEvent { //TODO: Move All events to shared lib
     private Long rideId;
 }

@@ -1,4 +1,4 @@
-package com.ridematch.driver.dto;
+package com.ridematch.ride.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ApiResponse<T> implements Serializable { //TODO: Move it to shared lib
+public class ApiResponse<T> implements Serializable {
     boolean success;
     T data;
     List<ErrorResponse> errors;

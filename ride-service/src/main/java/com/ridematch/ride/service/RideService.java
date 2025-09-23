@@ -22,17 +22,17 @@ public class RideService {
     private final ApplicationEventPublisher events;
 
     @Transactional
-    public void requestRide(RideRequest request) throws Exception {
+    public void requestRide(RideRequest request) {
         Ride ride = rideMapper.mapToEntity(request);
         rideRepository.save(ride);
         events.publishEvent(rideMapper.mapToRideRequestedEvent(ride));
     }
 
-    // TODO: Validate that ride belong to the user
+    // TODO: Validate that the ride belongs to the requested user
     public void cancelRide(Long id) {
         Ride ride = rideRepository.findById(id).get();
         if (!ride.getStatus().equals(RideStatus.REQUESTED)) {
-            throw new RuntimeException("Bad request"); // TODO: throw custom exception
+            throw new IllegalStateException("Ride cannot be canceled");
         }
 
         ride.setStatus(RideStatus.CANCELED);
@@ -46,9 +46,11 @@ public class RideService {
         if (ride.getStatus() == RideStatus.CANCELED) {
             events.publishEvent(new RideCanceledEvent(driverAssignmentDTO.getRideId()));
         }
+
         if (ride.getStatus() == RideStatus.COMPLETED) {
             events.publishEvent(rideMapper.mapToRideCompletedEvent(ride));
         }
+
         if (ride.getStatus() == RideStatus.REQUESTED) {
             ride.setStatus(RideStatus.ASSIGNED);
             ride.setDriverId(driverAssignmentDTO.getDriverId());
@@ -62,8 +64,11 @@ public class RideService {
         if (ride.getDriverId() == null || !ride.getDriverId().equals(driverId)) {
             throw new IllegalStateException("Driver mismatch");
         }
-        if (ride.getStatus() == RideStatus.CANCELED)
+
+        if (ride.getStatus() == RideStatus.CANCELED) {
             throw new IllegalStateException("Ride already canceled");
+        }
+
         if (ride.getStatus() != RideStatus.COMPLETED) {
             ride.setStatus(RideStatus.COMPLETED);
             events.publishEvent(rideMapper.mapToRideCompletedEvent(ride));
